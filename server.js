@@ -15,8 +15,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Delivery Dashboard Analytics data
-const deliveryDashboardData = {
+// Dashboard data
+const dashboardData = {
   charts: [
     {
       id: "order_status_summary",
@@ -58,7 +58,8 @@ const deliveryDashboardData = {
       id: "delivery_curve",
       type: "area",
       title: "Today's Delivery Curve",
-      description: "Shows how deliveries are distributed throughout the day by time",
+      description:
+        "Shows how deliveries are distributed throughout the day by time",
       data: [
         { time: "01:28", actual: 1, target: 0.5, forecast: 0.8 },
         { time: "08:54", actual: 2, target: 1, forecast: 1.5 },
@@ -136,7 +137,8 @@ const deliveryDashboardData = {
       id: "orders_valley_comparison",
       type: "donut",
       title: "Orders: Inside vs Outside Valley",
-      description: "Compares order distribution between valley and outer regions",
+      description:
+        "Compares order distribution between valley and outer regions",
       data: [
         { name: "Inside Valley", orders: 850 },
         { name: "Outside Valley", orders: 390 },
@@ -146,7 +148,8 @@ const deliveryDashboardData = {
       id: "rto_reasons",
       type: "donut",
       title: "Return to Origin Reasons",
-      description: "Shows why packages were returned before successful delivery",
+      description:
+        "Shows why packages were returned before successful delivery",
       data: [
         { reason: "Customer Not Available", count: 50 },
         { reason: "Wrong Address", count: 25 },
@@ -228,7 +231,8 @@ const deliveryDashboardData = {
     delivery_statistics: {
       id: "delivery_statistics",
       title: "Delivery Statistics",
-      description: "Overview of key delivery metrics and performance indicators",
+      description:
+        "Overview of key delivery metrics and performance indicators",
       data: [
         { id: "pending-pickups", title: "Pending Pickups", value: "18" },
         { id: "cancelled-orders", title: "Cancelled Orders", value: "5" },
@@ -292,41 +296,35 @@ const createResponse = (
 
 // Routes
 // GET - Retrieve full delivery dashboard data
-app.get("/api/delivery-dashboard", (req, res) => {
+app.get("/api/dashboard", (req, res) => {
   res.json(
-    createResponse(
-      deliveryDashboardData,
-      "Combined report fetched successfully",
-      true
-    )
+    createResponse(dashboardData, "Combined report fetched successfully", true)
   );
 });
 
 // GET - Retrieve summary metrics
-app.get("/api/delivery-dashboard/summary", (req, res) => {
+app.get("/api/dashboard/summary", (req, res) => {
   res.json(
     createResponse(
-      { cards: { number_cards: deliveryDashboardData.cards.number_cards } },
+      { cards: { number_cards: dashboardData.cards.number_cards } },
       "Summary metrics fetched successfully"
     )
   );
 });
 
 // GET - Retrieve charts
-app.get("/api/delivery-dashboard/charts", (req, res) => {
+app.get("/api/dashboard/charts", (req, res) => {
   res.json(
     createResponse(
-      { charts: deliveryDashboardData.charts },
+      { charts: dashboardData.charts },
       "Charts data fetched successfully"
     )
   );
 });
 
 // GET - Retrieve specific chart by ID
-app.get("/api/delivery-dashboard/charts/:chartId", (req, res) => {
-  const chart = deliveryDashboardData.charts.find(
-    (c) => c.id === req.params.chartId
-  );
+app.get("/api/dashboard/charts/:chartId", (req, res) => {
+  const chart = dashboardData.charts.find((c) => c.id === req.params.chartId);
   if (chart) {
     res.json(
       createResponse(
@@ -346,50 +344,50 @@ app.get("/api/delivery-dashboard/charts/:chartId", (req, res) => {
 });
 
 // GET - Retrieve cards
-app.get("/api/delivery-dashboard/cards", (req, res) => {
+app.get("/api/dashboard/cards", (req, res) => {
   res.json(
     createResponse(
-      { cards: deliveryDashboardData.cards },
+      { cards: dashboardData.cards },
       "Cards data fetched successfully"
     )
   );
 });
 
 // GET - Retrieve all tables
-app.get("/api/delivery-dashboard/tables", (req, res) => {
+app.get("/api/dashboard/tables", (req, res) => {
   res.json(
     createResponse(
-      { tables: deliveryDashboardData.tables },
+      { tables: dashboardData.tables },
       "Tables data fetched successfully"
     )
   );
 });
 
 // GET - Retrieve delivery statistics table
-app.get("/api/delivery-dashboard/delivery-statistics", (req, res) => {
+app.get("/api/dashboard/delivery-statistics", (req, res) => {
   res.json(
     createResponse(
-      { table: deliveryDashboardData.tables.delivery_statistics },
+      { table: dashboardData.tables.delivery_statistics },
       "Delivery statistics fetched successfully"
     )
   );
 });
 
 // GET - Retrieve top destinations table
-app.get("/api/delivery-dashboard/top-destinations", (req, res) => {
+app.get("/api/dashboard/top-destinations", (req, res) => {
   res.json(
     createResponse(
-      { table: deliveryDashboardData.tables.top_destinations },
+      { table: dashboardData.tables.top_destinations },
       "Top destinations fetched successfully"
     )
   );
 });
 
 // GET - Retrieve COD summary
-app.get("/api/delivery-dashboard/cod-summary", (req, res) => {
+app.get("/api/dashboard/cod-summary", (req, res) => {
   res.json(
     createResponse(
-      { cod_summary: deliveryDashboardData.cards.list_cards[0] },
+      { cod_summary: dashboardData.cards.list_cards[0] },
       "COD summary fetched successfully"
     )
   );
@@ -408,25 +406,19 @@ app.get("/health", (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(
-    `Delivery Dashboard API is running on http://localhost:${PORT}`
-  );
+  console.log(`Delivery Dashboard API is running on http://localhost:${PORT}`);
   console.log(`\nAvailable endpoints:`);
-  console.log(`  GET /api/delivery-dashboard - Full dashboard data`);
-  console.log(`  GET /api/delivery-dashboard/summary - Summary metrics`);
-  console.log(`  GET /api/delivery-dashboard/charts - All charts`);
+  console.log(`  GET /api/dashboard - Full dashboard data`);
+  console.log(`  GET /api/dashboard/summary - Summary metrics`);
+  console.log(`  GET /api/dashboard/charts - All charts`);
+  console.log(`  GET /api/dashboard/charts/:chartId - Specific chart`);
+  console.log(`  GET /api/dashboard/cards - All cards`);
+  console.log(`  GET /api/dashboard/tables - All tables`);
   console.log(
-    `  GET /api/delivery-dashboard/charts/:chartId - Specific chart`
+    `  GET /api/dashboard/delivery-statistics - Delivery statistics table`
   );
-  console.log(`  GET /api/delivery-dashboard/cards - All cards`);
-  console.log(`  GET /api/delivery-dashboard/tables - All tables`);
-  console.log(
-    `  GET /api/delivery-dashboard/delivery-statistics - Delivery statistics table`
-  );
-  console.log(
-    `  GET /api/delivery-dashboard/top-destinations - Top destinations table`
-  );
-  console.log(`  GET /api/delivery-dashboard/cod-summary - COD summary card`);
+  console.log(`  GET /api/dashboard/top-destinations - Top destinations table`);
+  console.log(`  GET /api/dashboard/cod-summary - COD summary card`);
   console.log(`  GET /health - Health check`);
 });
 
