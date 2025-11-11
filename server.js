@@ -298,7 +298,7 @@ const createResponse = (
 // GET - Retrieve full delivery dashboard data
 app.get("/api/dashboard", (req, res) => {
   res.json(
-    createResponse(dashboardData, "Combined report fetched successfully", true)
+    createResponse(dashboardData, "Combined report fetched successfully", false)
   );
 });
 
